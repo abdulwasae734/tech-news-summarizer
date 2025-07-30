@@ -7,11 +7,10 @@ import os
 from openai import OpenAI
 from crewai import Agent, Task, Crew
 
-# Load API Key
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# ----------------- AGENTS -----------------
+# agentssss
 fetcher_agent = Agent(
     role="Tech News Fetcher",
     goal="Fetch latest technology news headlines and links from a news website.",
@@ -24,14 +23,13 @@ summarizer_agent = Agent(
     backstory="Expert at summarizing complex info into engaging summaries."
 )
 
-# ----------------- TASKS -----------------
+# tasksss
 
 def fetch_news():
     try:
         print("🔎 Fetching latest news...")
-        # Using Hacker News API (always stable)
         url = "https://hacker-news.firebaseio.com/v0/topstories.json"
-        top_ids = requests.get(url, timeout=10).json()[:5]  # Top 5 news
+        top_ids = requests.get(url, timeout=10).json()[:5] # we taking top 5 news innit
 
         headlines = []
         for story_id in top_ids:
@@ -72,10 +70,9 @@ def summarize_news(news_list):
         })
     return summaries
 
-# ----------------- CREW & EXECUTION -----------------
+# crew and execution it seems
 def run_crew_ai():
     try:
-        # Define Tasks with expected_output (now required)
         fetch_task = Task(
             description="Fetch top 5 latest tech news with title and URL.",
             agent=fetcher_agent,
@@ -90,21 +87,18 @@ def run_crew_ai():
             async_execution=False
         )
 
-        # Create the Crew and run it
         crew = Crew(
             agents=[fetcher_agent, summarizer_agent],
             tasks=[fetch_task, summarize_task]
         )
 
-        # Manually run the steps using our Python functions
         news = fetch_news()
         if not news:
-            print("⚠️ No news fetched. Check website availability.")
+            print("No news fetched. Check website availability.")
             return
 
         summaries = summarize_news(news)
 
-        # Save results only if valid
         if summaries:
             data = {
                 "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -112,12 +106,12 @@ def run_crew_ai():
             }
             with open("summaries.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=4)
-            print("✅ Summaries saved to summaries.json")
+            print("Summaries saved to summaries.json")
         else:
-            print("⚠️ Summarization failed.")
+            print("Summarization failed.")
 
     except Exception as e:
-        print(f"❌ Error running CrewAI: {e}")
+        print(f"Error running CrewAI: {e}")
 
 
 if __name__ == "__main__":
