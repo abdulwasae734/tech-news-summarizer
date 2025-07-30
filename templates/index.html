@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tech News Summarizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .news-item { margin-bottom: 15px; }
+        h2 { color: #007bff; }
+    </style>
+</head>
+<body>
+    <h1>Tech News Summarizer</h1>
+    <p>Last Updated: {{ data.date }}</p>
+    <div>
+        {% for news in data.summaries %}
+            <div class="news-item">
+                <h2><a href="{{ news.url }}" target="_blank">{{ news.title }}</a></h2>
+                <p>{{ news.summary }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
